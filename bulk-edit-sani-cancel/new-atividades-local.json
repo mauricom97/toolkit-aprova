@@ -1,0 +1,428 @@
+{
+  "fieldGroup": [
+    {
+      "key": "cpf_cnpj_responsavel",
+      "type": "next-cpf-cnpj",
+      "templateOptions": {
+        "label": "CPF/CNPJ",
+        "omitirCrea": true,
+        "labelNomeResp": "Nome do proprietário",
+        "labelCpfResp": "CPF do proprietário",
+        "placeholder": "000.000.000-00",
+        "focus": "false",
+        "type": "text",
+        "required": true
+      },
+      "validatorsText": "{\\n\\t\\t\\tvalidation: Validators.compose([Validators.required, Validators.minLength(14)])\\n\\t\\t}",
+      "hideExpression": "(() => {if(model.solicitacao === 'Requisição de Licenciamento Sanitário para Veículo') { return true }; })()"
+    },
+    {
+      "key": "nome_proprietario",
+      "resetOnHide": true,
+      "type": "next-input",
+      "templateOptions": {
+        "label": "Razão social e/ou nome",
+        "required": true
+      },
+      "hideExpression": "(() => {if(model.solicitacao === 'Requisição de Licenciamento Sanitário para Veículo') { return true }; })()"
+    },
+    {
+      "key": "nome_fantasia",
+      "type": "next-input",
+      "templateOptions": {
+        "label": "Nome fantasia",
+        "placeholder": "Nome fantasia",
+        "focus": "false",
+        "type": "text",
+        "required": false
+      },
+      "hideExpression": "(() => {if(model.solicitacao === 'Requisição de Licenciamento Sanitário para Veículo') { return true }; return model.cpf_cnpj_responsavel?.type !== 'cnpj'})()"
+    },
+    {
+      "key": "rg_estabelecimento",
+      "type": "next-upload",
+      "templateOptions": {
+        "label": "Cópia da carteira de identidade",
+        "options": [],
+        "focus": "false",
+        "required": true
+      },
+      "hideExpression": "(() => {if(model.solicitacao === 'Requisição de Licenciamento Sanitário para Veículo') { return true }; return model.cpf_cnpj_responsavel.type !== 'cpf'})()"
+    },
+    {
+      "key": "cepAuxiliar",
+      "type": "input",
+      "templateOptions": {
+        "label": "CEP do estabelecimento",
+        "mask": "00000-009",
+        "focus": "false",
+        "required": true
+      },
+      "expressionProperties": {
+        "templateOptions|||required": "(() => {try {let is_true = false; if (model.cepAuxiliar >= 89200001 && model.cepAuxiliar <= 89239999) { is_true = true; } return is_true; } catch (err) { return err; }})()"
+      },
+      "hideExpression": "(() => {if(model.solicitacao === 'Requisição de Licenciamento Sanitário para Veículo') { return true }; })()"
+    },
+    {
+      "key": "aviso_cep",
+      "type": "textarea",
+      "hideExpression": "(() => {if(model.solicitacao === 'Requisição de Licenciamento Sanitário para Veículo') { return true }; ry {let is_true = false; if (model.cepAuxiliar >= 89200001 && model.cepAuxiliar <= 89239999) { is_true = true; } return is_true; } catch (err) { return err; })()",
+      "templateOptions": {
+        "rows": "1",
+        "cols": "33",
+        "label": "AVISO SOBRE O CEP",
+        "labelBadge": "warning",
+        "placeholder": "O cep precisar pertencer ao municipio de Joinville",
+        "focus": "false",
+        "readonly": true
+      }
+    },
+    {
+      "key": "cep_estabelecimento",
+      "type": "next-input",
+      "wrappers": [
+        "integrations"
+      ],
+      "templateOptions": {
+        "label": "CEP",
+        "mask": "00000-000",
+        "idIntegration": "5ea721cea4373533ebc3163a",
+        "saveIntegrationResponse": true,
+        "required": false,
+        "hidden": true,
+        "hideData": true
+      },
+      "expressionProperties": {
+        "model|||cep_estabelecimento": "model.cepAuxiliar ? { 'input': model.cepAuxiliar  } : {} "
+      },
+      "hideExpression": "(() => {if(model.solicitacao === 'Requisição de Licenciamento Sanitário para Veículo') { return true }; })()"
+    },
+    {
+      "key": "rua_estabelecimento",
+      "resetOnHide": true,
+      "type": "input",
+      "templateOptions": {
+        "label": "Endereço",
+        "required": true
+      },
+      "expressionProperties": {
+        "model|||rua_estabelecimento": "model.rua_estabelecimento ? model.rua_estabelecimento : model.cep_estabelecimento?.data?.response?.registros?.find( () => true )?.Logradouro "
+      },
+      "hideExpression": "(() => {if(model.solicitacao === 'Requisição de Licenciamento Sanitário para Veículo') { return true }; return model.cepAuxiliar?.length !== 8 })()"
+    },
+    {
+      "key": "numero_estabelecimento",
+      "type": "input",
+      "templateOptions": {
+        "label": "Número predial",
+        "required": true
+      },
+      "hideExpression": "(() => {if(model.solicitacao === 'Requisição de Licenciamento Sanitário para Veículo') { return true }; })()"
+    },
+    {
+      "key": "complemento-estabelecimento",
+      "expressionProperties": {
+        "model|||complemento-estabelecimento": "model['complemento-estabelecimento'] ? model['complemento-estabelecimento'] : model.cep_estabelecimento?.data?.response?.registros?.find( () => true )?.Complemento "
+      },
+      "hideExpression": "(() => {if(model.solicitacao === 'Requisição de Licenciamento Sanitário para Veículo') { return true }; return model.cepAuxiliar?.length !== 8 })()",
+      "type": "input",
+      "templateOptions": {
+        "label": "Complemento"
+      }
+    },
+    {
+      "key": "bairro_estabelecimento",
+      "resetOnHide": true,
+      "type": "input",
+      "templateOptions": {
+        "label": "Bairro",
+        "required": true
+      },
+      "expressionProperties": {
+        "model|||bairro_estabelecimento": "model.bairro_estabelecimento ? model.bairro_estabelecimento : model.cep_estabelecimento?.data?.response?.registros?.find( () => true )?.Bairro   "
+      },
+      "hideExpression": "(() => {if(model.solicitacao === 'Requisição de Licenciamento Sanitário para Veículo') { return true }; return model.cepAuxiliar?.length !== 8 })()"
+    },
+    {
+      "key": "cidade_estabelecimento",
+      "resetOnHide": true,
+      "type": "input",
+      "templateOptions": {
+        "label": "Cidade",
+        "required": true
+      },
+      "expressionProperties": {
+        "model|||cidade_estabelecimento": "model.cidade_estabelecimento ? model.cidade_estabelecimento : model.cep_estabelecimento?.data?.response?.registros?.find( () => true )?.Cidade "
+      },
+      "hideExpression": "(() => {if(model.solicitacao === 'Requisição de Licenciamento Sanitário para Veículo') { return true }; return model.cepAuxiliar?.length !== 8 })()"
+    },
+    {
+      "key": "uf_estabelecimento",
+      "resetOnHide": true,
+      "type": "select",
+      "templateOptions": {
+        "label": "UF",
+        "options": [
+          {
+            "label": "Acre",
+            "value": "AC"
+          },
+          {
+            "label": "Alagoas",
+            "value": "AL"
+          },
+          {
+            "label": "Amapá",
+            "value": "AP"
+          },
+          {
+            "label": "Amazonas",
+            "value": "AM"
+          },
+          {
+            "label": "Bahia",
+            "value": "BA"
+          },
+          {
+            "label": "Ceará",
+            "value": "CE"
+          },
+          {
+            "label": "Distrito Federal",
+            "value": "DF"
+          },
+          {
+            "label": "Espírito Santo",
+            "value": "ES"
+          },
+          {
+            "label": "Goiás",
+            "value": "GO"
+          },
+          {
+            "label": "Maranhão",
+            "value": "MA"
+          },
+          {
+            "label": "Mato Grosso",
+            "value": "MT"
+          },
+          {
+            "label": "Mato Grosso do Sul",
+            "value": "MS"
+          },
+          {
+            "label": "Minas Gerais",
+            "value": "MG"
+          },
+          {
+            "label": "Pará",
+            "value": "PA"
+          },
+          {
+            "label": "Paraíba",
+            "value": "PB"
+          },
+          {
+            "label": "Paraná",
+            "value": "PR"
+          },
+          {
+            "label": "Pernambuco",
+            "value": "PE"
+          },
+          {
+            "label": "Piauí",
+            "value": "PI"
+          },
+          {
+            "label": "Rio de Janeiro",
+            "value": "RJ"
+          },
+          {
+            "label": "Rio Grande do Norte",
+            "value": "RN"
+          },
+          {
+            "label": "Rio Grande do Sul",
+            "value": "RS"
+          },
+          {
+            "label": "Rondônia",
+            "value": "RO"
+          },
+          {
+            "label": "Roraima",
+            "value": "RR"
+          },
+          {
+            "label": "Santa Catarina",
+            "value": "SC"
+          },
+          {
+            "label": "São Paulo",
+            "value": "SP"
+          },
+          {
+            "label": "Sergipe",
+            "value": "SE"
+          },
+          {
+            "label": "Tocantins",
+            "value": "TO"
+          }
+        ],
+        "placeholder": "--selecione--",
+        "required": true
+      },
+      "expressionProperties": {
+        "model|||uf_estabelecimento": "model.uf_estabelecimento ? model.uf_estabelecimento : model.cep_estabelecimento?.data?.response?.registros?.find( () => true )?.UF "
+      },
+      "hideExpression": "(() => {if(model.solicitacao === 'Requisição de Licenciamento Sanitário para Veículo') { return true }; return model.cepAuxiliar?.length !== 8 })()"
+    },
+    {
+      "key": "cel_estabelecimento",
+      "type": "input",
+      "templateOptions": {
+        "mask": "(00) 00000-0000",
+        "required": true,
+        "label": "Celular"
+      },
+      "hideExpression": "(() => {if(model.solicitacao === 'Requisição de Licenciamento Sanitário para Veículo') { return true }; })()"
+    },
+    {
+      "key": "email_estabelecimento",
+      "type": "input",
+      "validators": {
+        "validation": [
+          "email"
+        ]
+      },
+      "templateOptions": {
+        "required": true,
+        "label": "E-mail"
+      },
+      "hideExpression": "(() => {if(model.solicitacao === 'Requisição de Licenciamento Sanitário para Veículo') { return true }; })()"
+    },
+    {
+      "key": "horario_funcionamento",
+      "type": "multicheckbox",
+      "templateOptions": {
+        "label": "Horários de Funcionamento",
+        "options": [
+          {
+            "label": "Manhã",
+            "value": "Manhã"
+          },
+          {
+            "label": "Tarde",
+            "value": "Tarde"
+          },
+          {
+            "label": "Noite (entre 19:00 e 07:00hrs)",
+            "value": "Noite (entre 19:00 e 07:00hrs)"
+          }
+        ],
+        "focus": "false",
+        "required": true
+      },
+      "hideExpression": "(() => {if(model.solicitacao === 'Requisição de Licenciamento Sanitário para Veículo') { return true }; })()"
+    },
+    {
+      "key": "dias_semana",
+      "type": "multicheckbox",
+      "templateOptions": {
+        "label": "Dias da Semana",
+        "options": [
+          {
+            "label": "Segunda-feira",
+            "value": "Segunda-feira"
+          },
+          {
+            "label": "Terça-feira",
+            "value": "Terça-feira"
+          },
+          {
+            "label": "Quarta-feira",
+            "value": "Quarta-feira"
+          },
+          {
+            "label": "Quinta-feira",
+            "value": "Quinta-feira"
+          },
+          {
+            "label": "Sexta-feira",
+            "value": "Sexta-feira"
+          },
+          {
+            "label": "Sábado",
+            "value": "Sábado"
+          },
+          {
+            "label": "Domingo",
+            "value": "Domingo"
+          }
+        ],
+        "focus": "false",
+        "required": true
+      },
+      "hideExpression": "(() => {if(model.solicitacao === 'Requisição de Licenciamento Sanitário para Veículo') { return true }; })()"
+    },
+    {
+      "key": "isento",
+      "type": "radio",
+      "templateOptions": {
+        "label": "Declara isenção conforme Lei Complementar nº 643/2023, apresentada nas Instruções ao lado?",
+        "options": [
+          {
+            "value": "Sim"
+          },
+          {
+            "value": "Não"
+          }
+        ],
+        "focus": "false",
+        "required": true
+      },
+      "hideExpression": "(() => {if(model.solicitacao === 'Requisição de Licenciamento Sanitário para Veículo') { return true }; })()"
+    },
+    {
+      "key": "motivo_isencao",
+      "type": "radio",
+      "templateOptions": {
+        "label": "Informar o motivo da Isenção",
+        "options": [
+          {
+            "value": "I - a União, o Estado, as autarquias, as fundações, as secretarias públicas municipais e órgãos públicos municipais;  Anexo obrigatório: CNPJ (Cadastro Nacional da Pessoa Jurídica);"
+          },
+          {
+            "value": "II - as instituições beneficentes, com personalidade jurídica, que se dediquem exclusivamente às atividades assistenciais, sem fins lucrativos, mediante apresentação do correspondente título de filantropia atualizado;  Anexo obrigatório: Título de filantropia atualizado emitido pela Câmara de Vereadores (validade: 1 ano);"
+          },
+          {
+            "value": "III - as instituições com personalidade jurídica que promovam eventos com fins sociais, bem como os grupos sociais organizados que comprovem a finalidade social do evento.  Anexo obrigatório: Declaração e documentação que comprove a finalidade social do evento;"
+          },
+          {
+            "value": "IV - Os produtores rurais da agricultura familiar, beneficiários da Declaração de Aptidão ao Programa Nacional de Fortalecimento da Agricultura Familiar (PRONAF/DAP) vinculado ao Ministério da Agricultura, Pecuária e Abastecimento;  Anexo obrigatório: Declaração de Aptidão ao PRONAF/DAP válida (validade: 1 ano);"
+          },
+          {
+            "value": "V - Os empresários individuais enquadrados na condição de Microempreendedor Individual.  Anexo obrigatório: Certificado de Microempreendedor Individual atualizado, compatível com os dados da solicitação."
+          }
+        ],
+        "focus": "false",
+        "required": true
+      },
+      "hideExpression": "(() => {if(model.solicitacao === 'Requisição de Licenciamento Sanitário para Veículo') { return true }; return model.isento === 'Não'})()"
+    },
+    {
+      "key": "comprovante_isencao",
+      "type": "next-upload",
+      "templateOptions": {
+        "label": "Comprovante de isenção",
+        "options": [],
+        "focus": "false",
+        "required": true
+      },
+      "hideExpression": "(() => {if(model.solicitacao === 'Requisição de Licenciamento Sanitário para Veículo') { return true }; return model.isento === 'Não'})()"
+    }
+  ]
+}

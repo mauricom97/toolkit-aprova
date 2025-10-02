@@ -1,0 +1,19 @@
+{
+  "fieldGroup": [
+    {
+      "key": "declaracao_teste",
+      "type": "radio",
+      "templateOptions": {
+        "label": "Declaro estar ciente das normas sanitárias vigentes para a atividade pretendida e me comprometo ao cumprimento das mesmas, assegurando a qualidade dos produtos e/ou serviços ofertados e o atendimento à Lei Brasileira de Inclusão da pessoa com deficiência, quando aplicável.",
+        "options": [
+          {
+            "value": "Declaro"
+          }
+        ],
+        "focus": "false",
+        "required": true
+      },
+      "hideExpression": "model.tipo_risco !== 'Autodeclaração'"
+    }
+  ]
+}
